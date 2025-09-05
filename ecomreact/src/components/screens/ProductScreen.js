@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import Rating from '../Rating'
 
 
-function ProductScreen({params}) {
+function ProductScreen() {
     const [product,setProduct] = useState([])
     const {id} = useParams()
   useEffect(()=>{
@@ -25,10 +25,11 @@ function ProductScreen({params}) {
 
       <Row>
         <Col md={6}>
-            <Image style={{width:'300px', height:'300px'}} src={product.image} alt={product.name} fluid />
-        </Col>
-        <Col md={3}>
-        <Card>
+        
+            <Image style={{width:'500px', height:'500px'}} src={product.image} alt={product.name} fluid />
+            </Col>
+          <Col md={6}>
+          <Card>
             <ListGroup variant='flush'>
                 <ListGroupItem>
                     <h3>{product.product_name}</h3>
@@ -44,7 +45,14 @@ function ProductScreen({params}) {
                     <h3>{product.price}₹</h3>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <h3>{product.product_info}</h3>
+                  <label>Status:</label>
+                    <h3>{product.in_stock > 0 ? 'In Stock':'Out of Stock'}</h3>
+                </ListGroupItem>
+                <ListGroupItem>
+                    <p>{product.product_info}</p>
+                </ListGroupItem>
+                <ListGroupItem>
+                    <button className='btn-block btn-success' disabled={product.in_stock==0} type='button' >Add To Cart</button>
                 </ListGroupItem>
             </ListGroup>
             </Card>
