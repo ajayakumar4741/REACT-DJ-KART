@@ -14,7 +14,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     in_stock = models.PositiveBigIntegerField(null=True, blank=True) 
     created_at = models.DateTimeField(auto_now_add=True)
-    _id = models.AutoField(primary_key=True, editable=False)
+    
     
     class Meta:
         verbose_name_plural = "Products"
