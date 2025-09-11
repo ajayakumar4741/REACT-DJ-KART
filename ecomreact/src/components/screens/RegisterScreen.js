@@ -6,27 +6,41 @@ import Loader from '../Loader';
 import Message from '../Message';
 import { InputGroup } from "react-bootstrap";
 import { validPassword } from "./Regex";
+import { register } from "../../actions/userActions";
+
 
 function RegisterScreen() {
   const navigate = useNavigate()
   const [fname, setFname] = useState('')
   const [lname, setLname] = useState('')
+  const [email, setEmail] = useState('')
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
-  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
   const [success, setSuccess] = useState('')
-  const [show,changeShow] = useState('fa fa-eye-slash')
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const redirect = location.search?location.search.split('=')[1] : '/'
+  const userRegister = useSelector((state)=>state.userRegister)
+  const {error,loading,userInfo} = userRegister
+
+  useEffect(()=>{
+    if(userInfo){
+      navigate('/')
+    }
+  },[userInfo,redirect])
 
   const SubmitHandler=(e)=>{
     e.preventDefault()
     if(password1 !== password2){
-      setError('Password do not match')
-      navigate('/register')
+      setMessage('Password do not match')
+      return
     }else if(!validPassword.test(password1)){
-      setError('Password not strong')
+      setMessage('Password not strong')
     }else{
-      setError('')
-      setSuccess('Register Successfully')
+      dispatch(register(fname,lname,email,password1))
+      
+      navigate('/login')
     }
   }
 
@@ -37,11 +51,11 @@ function RegisterScreen() {
     if (x.type === 'password' && z.type === 'password'){
       x.type = 'text'
       z.type = 'text'
-      changeShow('fa fa-eye')
+      
     }else{
       x.type = 'password'
       z.type = 'password'
-      changeShow('fa fa-eye-slash')
+      
     }
   }
   return (
@@ -55,7 +69,7 @@ function RegisterScreen() {
                 Register
               </Card.Header>
               <Card.Body>
-                {error && <Message variant='warning'>{error}</Message>}
+                {message && <Message variant='warning'>{message}</Message>}
                 {success && <Message variant='success'>{success}</Message>}
                 <Form onSubmit={SubmitHandler}>
                   <Form.Group className="mb-3" >
@@ -68,10 +82,10 @@ function RegisterScreen() {
                   </Form.Group>
                   <Form.Group className="mb-3" >
                     <Form.Label> <span><i className='fa-solid fa-envelope'></i></span>Email </Form.Label>
-                    <Form.Control type="email" placeholder="Enter Your Email Address"  required />
+                    <Form.Control type="email" placeholder="Enter Your Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   </Form.Group>
                   <Form.Group className="mb-3"  >
-                    <Form.Label> <span><i className={show}></i></span>Password </Form.Label>
+                    <Form.Label> <span><i ></i></span>Password </Form.Label>
                     <InputGroup className="mb-3">
                           <InputGroup.Checkbox onClick={showPassword}/>
                           {" "}
@@ -87,7 +101,7 @@ function RegisterScreen() {
                     </Form.Group>
                     <small>Password must include atleast [1-9][a-z][A-Z][_!@#$]</small>
                   <Form.Group className="mb-3" >
-                    <Form.Label> <span><i className={show}></i></span>Confirm Password </Form.Label>
+                    <Form.Label> <span><i ></i></span>Confirm Password </Form.Label>
                     <InputGroup className="mb-3">
                           <InputGroup.Checkbox onClick={showPassword}/>
                           {" "}

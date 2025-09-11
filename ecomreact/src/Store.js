@@ -3,11 +3,14 @@ import { configureStore } from '@reduxjs/toolkit';
 //import {thunk} from 'redux-thunk'
 //import {composeWithDevTools} from '@redux-devtools/extension'
 import { productsListReducers,productDetailsReducers } from './reducers/ProductReducers';
+import { userLoginReducer,userRegisterReducer } from './reducers/userReducers';
 
 const store = configureStore({
   reducer: {
     productsList: productsListReducers,
-    productDetails: productDetailsReducers
+    productDetails: productDetailsReducers,
+    userLogin: userLoginReducer,
+    userRegister: userRegisterReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(), // thunk is included by default
