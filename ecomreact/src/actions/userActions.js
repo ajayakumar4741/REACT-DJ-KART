@@ -63,7 +63,8 @@ export const login = (fname, password) => async (dispatch) => {
             payload: data
         })
 
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        // localStorage.setItem('userInfo', JSON.stringify(data))
+        // localStorage.setItem('accountActivation', "Activate Your Account With Provided Link In Your Mail")
     }
 
     catch (error) {
@@ -72,4 +73,9 @@ export const login = (fname, password) => async (dispatch) => {
             payload: error?.response?.data?.detail || error.message,
         })
     }
+}
+
+export const logout=(dispatch)=>{
+    localStorage.removeItem('userInfo')
+    dispatch({type:userConstants.USER_LOGOUT})
 }

@@ -14,8 +14,6 @@ function LoginScreen() {
   const navigate = useNavigate()
     const [fname, setFname] = useState('')
     const [password1, setPassword1] = useState('')
-    const [message, setMessage] = useState('')
-    const [success, setSuccess] = useState('')
     const dispatch = useDispatch()
     const userLogin = useSelector(state=>state.userLogin)
     const location = useLocation()
@@ -39,12 +37,8 @@ function LoginScreen() {
     
     if (x.type === 'password'){
       x.type = 'text'
-      
-      
     }else{
       x.type = 'password'
-      
-      
     }
   }
   return (
@@ -53,13 +47,18 @@ function LoginScreen() {
         <Row>
           <Col md={4}></Col>
           <Col md={4}>
-            <Card>
+          {loading?(
+          <Loader/>
+        ): error?(
+          <Message variant='warning'>{error}</Message>
+        ):(
+          <Card>
               <Card.Header as='h1' className="text-center bg-black text-light">
                 Login
               </Card.Header>
               <Card.Body>
-                {message && <Message variant='warning'>{message}</Message>}
-                {success && <Message variant='success'>{success}</Message>}
+                {/* {error && <Message variant='warning'>{error}</Message>}
+                {loading && <Loader/>} */}
                 <Form onSubmit={SubmitHandler}>
                   <Form.Group className="mb-3" >
                     <Form.Label> <span><i className='fa fa-user'></i></span> First Name</Form.Label>
@@ -97,6 +96,8 @@ function LoginScreen() {
                 </Row>
               </Card.Body>
             </Card>
+        )}
+            
           </Col>
           <Col md={4}></Col>
         </Row>

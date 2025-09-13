@@ -17,7 +17,6 @@ function RegisterScreen() {
   const [password1, setPassword1] = useState('')
   const [password2, setPassword2] = useState('')
   const [message, setMessage] = useState('')
-  const [success, setSuccess] = useState('')
   const dispatch = useDispatch()
   const location = useLocation()
   const redirect = location.search?location.search.split('=')[1] : '/'
@@ -26,7 +25,12 @@ function RegisterScreen() {
 
   useEffect(()=>{
     if(userInfo){
-      navigate('/')
+      setMessage(userInfo.details)
+      setEmail('')
+      setFname('')
+      setLname('')
+      setPassword1('')
+      setPassword2('')
     }
   },[userInfo,redirect])
 
@@ -37,7 +41,11 @@ function RegisterScreen() {
       return
     }else if(!validPassword.test(password1)){
       setMessage('Password not strong')
-    }else{
+    }else if(error){
+      setMessage('User Already Exists')
+      return
+    }
+    else{
       dispatch(register(fname,lname,email,password1))
       
       navigate('/login')
@@ -70,7 +78,7 @@ function RegisterScreen() {
               </Card.Header>
               <Card.Body>
                 {message && <Message variant='warning'>{message}</Message>}
-                {success && <Message variant='success'>{success}</Message>}
+                {loading && <Loader/>}
                 <Form onSubmit={SubmitHandler}>
                   <Form.Group className="mb-3" >
                     <Form.Label> <span><i className='fa fa-user'></i></span> First Name</Form.Label>

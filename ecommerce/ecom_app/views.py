@@ -18,7 +18,16 @@ from django.utils.encoding import force_bytes, force_str , DjangoUnicodeDecodeEr
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.views.generic import View
+import threading
 # Create your views here.
+
+class EmailThread(threading.Thread):
+    def __init__(self,email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+        
+    def run(self):
+        self.email_message.send()
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -81,9 +90,10 @@ def registerUser(request):
         )
         # print(message)
         email_messsage = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER,[data['email']])
-        email_messsage.send()
-        serialize = UserSerializerWithToken(user, many=False)
-        return Response(serialize.data)
+        EmailThread(email_messsage).start()
+        
+        # serialize = UserSerializerWithToken(user, many=False)
+        return Response({'details':'Activate your account please check your email...'})
     except Exception as e:
         message = {'details':str(e)}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
