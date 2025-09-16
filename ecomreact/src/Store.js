@@ -4,19 +4,27 @@ import { configureStore } from '@reduxjs/toolkit';
 //import {composeWithDevTools} from '@redux-devtools/extension'
 import { productsListReducers,productDetailsReducers } from './reducers/ProductReducers';
 import { userLoginReducer,userRegisterReducer } from './reducers/userReducers';
+import { cartReducer } from './reducers/cartReducers';
+const cartItemsFromStorage = localStorage.getItem('cartItems')?
+JSON.parse(localStorage.getItem('cartItems')): []
 
 const store = configureStore({
   reducer: {
     productsList: productsListReducers,
     productDetails: productDetailsReducers,
     userLogin: userLoginReducer,
-    userRegister: userRegisterReducer
+    userRegister: userRegisterReducer,
+    cart: cartReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(), // thunk is included by default
-  preloadedState: {}, // optional, use if you have initial state
-  devTools: true, // optional, enabled by default
+  preloadedState: {
+    cart:{cartItems:cartItemsFromStorage}
+  }, 
+  devTools: true, 
 });
+
+
 
 export default store;
 

@@ -26,13 +26,9 @@ function RegisterScreen() {
   useEffect(()=>{
     if(userInfo){
       setMessage(userInfo.details)
-      setEmail('')
-      setFname('')
-      setLname('')
-      setPassword1('')
-      setPassword2('')
+      
     }
-  },[userInfo,redirect])
+  },[userInfo])
 
   const SubmitHandler=(e)=>{
     e.preventDefault()
@@ -41,9 +37,6 @@ function RegisterScreen() {
       return
     }else if(!validPassword.test(password1)){
       setMessage('Password not strong')
-    }else if(error){
-      setMessage('User Already Exists')
-      return
     }
     else{
       dispatch(register(fname,lname,email,password1))
